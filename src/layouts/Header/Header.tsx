@@ -8,20 +8,12 @@ const { Header } = Layout;
 export default function AppHeader() {
   const location = useLocation();
   
-  // Debug: log the current location
-  console.log('Current location:', location.pathname);
-
   // menu chính
   const mainMenu: MenuProps['items'] = [
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: <Link to="/">Home</Link>
-    },
-    {
-      key: '/feed',
-      icon: <AppstoreOutlined />,
-      label: <Link to="/feed">Feed</Link>
+      label: <Link to="/">Feed</Link>
     },
     {
       key: '/chat',
@@ -64,17 +56,16 @@ export default function AppHeader() {
       }}
     >
       {/* Logo */}
-      <div style={{ fontWeight: 'bold', fontSize: '20px', color: '#1890ff' }}>SocialApp</div>
+      <div style={{ fontWeight: 'bold', fontSize: '20px', color: '#1890ff' }}>Social App</div>
 
       {/* Menu */}
       <Menu
         mode="horizontal"
         selectedKeys={[location.pathname]}
         items={mainMenu}
-        style={{ flex: 1, justifyContent: 'center' }}
+        style={{ flex: 1, marginLeft: '24px' }}
       />
 
-      {/* User Avatar + Dropdown */}
       <Dropdown menu={{ items: userMenu }} placement="bottomRight">
         <Space style={{ cursor: 'pointer' }}>
           <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
