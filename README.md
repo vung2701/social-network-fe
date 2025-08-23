@@ -67,3 +67,7 @@ export default tseslint.config([
   },
 ])
 ```
+<<<<<<< HEAD
+=======
+# social-network-fe
+>>>>>>> 91dec07 (Initial commit)
