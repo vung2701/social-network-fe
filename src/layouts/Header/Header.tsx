@@ -47,30 +47,35 @@ export default function AppHeader() {
   return (
     <Header
       style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         background: '#fff',
-        padding: '0 24px',
         boxShadow: '0 2px 8px #f0f1f2'
       }}
     >
-      {/* Logo */}
-      <div style={{ fontWeight: 'bold', fontSize: '20px', color: '#1890ff' }}>Social App</div>
+      <div
+        className="inner"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        {/* Logo */}
+        <div style={{ fontWeight: 'bold', fontSize: '20px', color: '#1890ff' }}>Social App</div>
 
-      {/* Menu */}
-      <Menu
-        mode="horizontal"
-        selectedKeys={[location.pathname]}
-        items={mainMenu}
-        style={{ flex: 1, marginLeft: '24px' }}
-      />
+        {/* Menu */}
+        <Menu
+          mode="horizontal"
+          selectedKeys={[location.pathname]}
+          items={mainMenu}
+          style={{ flex: 1, marginLeft: '24px' }}
+        />
 
-      <Dropdown menu={{ items: userMenu }} placement="bottomRight">
-        <Space style={{ cursor: 'pointer' }}>
-          <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-        </Space>
-      </Dropdown>
+        <Dropdown menu={{ items: userMenu }} placement="bottomRight">
+          <Space style={{ cursor: 'pointer' }}>
+            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+          </Space>
+        </Dropdown>
+      </div>
     </Header>
   );
 }

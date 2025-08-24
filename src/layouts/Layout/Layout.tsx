@@ -1,20 +1,24 @@
 import {  Layout } from 'antd';
 import AppHeader from '../Header/Header';
 import { Outlet } from 'react-router-dom';
+import AppFooter from '../Footer/Footer';
 
 const { Content } = Layout;
 
 export default function AppLayout() {
   return (
-    <Layout >
-      {/* <Sider width="25%" style={siderStyle}>
-        Sider
-      </Sider> */}
       <Layout>
         <AppHeader />
-        <Content> <Outlet /></Content>
-        {/* <Footer style={footerStyle}>Footer</Footer> */}
+        <Content
+          style={{
+            minHeight: "calc(100vh - 364px)",
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+        >
+          <Outlet />
+        </Content>
+        <AppFooter />
       </Layout>
-    </Layout>
   );
 }
