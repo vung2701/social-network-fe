@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layout
 import Layout from '../layouts/Layout/Layout';
@@ -50,46 +50,44 @@ export default function AppRouter() {
   const isAuthenticated = false; // This should come from your auth context/store
   
   return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoading />}>
-        <Routes>
-          {/* Public Routes - No Layout */}
-          <Route 
-            path="/login" 
-            element={
-              <PublicRoute isAuthenticated={isAuthenticated}>
-                <Login />
-              </PublicRoute>
-            } 
-          />
+    <Suspense fallback={<PageLoading />}>
+      <Routes>
+        {/* Public Routes - No Layout */}
+        <Route 
+          path="/login" 
+          element={
+            <PublicRoute isAuthenticated={isAuthenticated}>
+              <Login />
+            </PublicRoute>
+          } 
+        />
+        
+        {/* Protected Routes - With Layout */}
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Layout />
+            </ProtectedRoute>
+          } 
+        >
+          <Route index element={<Home />} />
           
-          {/* Protected Routes - With Layout */}
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Layout />
-              </ProtectedRoute>
-            } 
-          >
-            <Route index element={<Home />} />
-            
-            {/* TODO: Add more routes here when pages are created */}
-            {/* Example:
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            */}
-          </Route>
-          
-          {/* Catch all route - redirect to home */}
-          <Route 
-            path="*" 
-            element={<Navigate to="/" replace />} 
-          />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+          {/* TODO: Add more routes here when pages are created */}
+          {/* Example:
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          */}
+        </Route>
+        
+        {/* Catch all route - redirect to home */}
+        <Route 
+          path="*" 
+          element={<Navigate to="/" replace />} 
+        />
+      </Routes>
+    </Suspense>
   );
 }
