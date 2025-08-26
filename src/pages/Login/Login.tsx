@@ -11,7 +11,8 @@ import {
   Checkbox,
   Row,
   Col,
-  App
+  App,
+  Spin
 } from 'antd';
 import { 
   UserOutlined, 
@@ -19,7 +20,7 @@ import {
   EyeInvisibleOutlined, 
   EyeTwoTone,
   GoogleOutlined,
-  FacebookOutlined
+  FacebookOutlined,
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import type { LoginFormData } from '../../types/types';
@@ -135,48 +136,37 @@ export default function LoginPage() {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
-                >
-                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                </AppButton>
+                  children={loading ? <Spin /> : 'Đăng nhập'}
+                />
               </Form.Item>
             </Form>
 
             <Divider>hoặc</Divider>
 
-            {/* Social Login Buttons */}
-            <Space direction="vertical" style={{ width: '100%' }} size="middle">
-              <Button
+            <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }} size="large">
+              <AppButton
                 icon={<GoogleOutlined />}
                 size="large"
+                onClick={handleGoogleLogin}
+                iconBtn={true}
                 style={{
-                  width: '100%',
-                  height: '44px',
-                  borderRadius: '8px',
                   border: '1px solid #d9d9d9'
                 }}
-                onClick={handleGoogleLogin}
-              >
-                Đăng nhập với Google
-              </Button>
+              />
 
-              <Button
+              <AppButton
                 icon={<FacebookOutlined />}
                 size="large"
+                onClick={handleFacebookLogin}
+                iconBtn={true}
                 style={{
-                  width: '100%',
-                  height: '44px',
-                  borderRadius: '8px',
                   background: '#1877f2',
                   borderColor: '#1877f2',
                   color: '#fff'
                 }}
-                onClick={handleFacebookLogin}
-              >
-                Đăng nhập với Facebook
-              </Button>
+              />
             </Space>
 
-            {/* Sign Up Link */}
             <div style={{ textAlign: 'center', marginTop: '24px' }}>
               <Text style={{ color: '#666' }}>Chưa có tài khoản? </Text>
               <Link to="/register" style={{ fontWeight: '600' }}>

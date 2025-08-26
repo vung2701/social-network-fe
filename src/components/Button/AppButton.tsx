@@ -2,7 +2,7 @@ import { Button } from "antd";
 import styles from './AppButton.module.css';
 
 export default function AppButton(props: any) {
-	const { type, htmlType, onClick, loading, classNames, children, icon, size } = props;
+	const { type, htmlType, onClick, loading, classNames, children = '', icon, size, iconBtn = false, style } = props;
 
 	return (
     <Button
@@ -10,9 +10,10 @@ export default function AppButton(props: any) {
       htmlType={htmlType}
       onClick={onClick}
       loading={loading}
-      className={`${styles.btn} ${classNames}`}
       icon={icon}
-      size={size}
+	  size={size}
+	  style={style}
+      className={`${styles.btn} ${iconBtn ? styles.iconBtn : ''} ${classNames}`}
     >
       {children}
     </Button>
