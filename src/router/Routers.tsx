@@ -6,6 +6,7 @@ import Layout from '../layouts/Layout/Layout';
 
 // Loading component
 import { PageLoading } from '../components/Loading/Loading';
+import RegisterPage from '../pages/Login/Register';
 
 // Lazy load pages - chỉ import các page đã tồn tại
 const Login = lazy(() => import('../pages/Login/Login'));
@@ -58,6 +59,14 @@ export default function AppRouter() {
           element={
             <PublicRoute isAuthenticated={isAuthenticated}>
               <Login />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <PublicRoute isAuthenticated={isAuthenticated}>
+              <RegisterPage />
             </PublicRoute>
           } 
         />

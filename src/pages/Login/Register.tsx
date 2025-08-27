@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
                 placeholder="Nhập mật khẩu của bạn"
                 iconRender={(visible: boolean) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-              />
+              />/
 
               <Form.Item>
                 <Row justify="space-between" align="middle">
