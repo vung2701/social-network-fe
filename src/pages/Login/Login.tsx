@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { 
   Form, 
-  Input, 
   Button, 
   Card, 
   Typography, 
@@ -11,7 +10,6 @@ import {
   Checkbox,
   Row,
   Col,
-  App,
   Spin
 } from 'antd';
 import { 
@@ -23,9 +21,9 @@ import {
   FacebookOutlined,
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import type { LoginFormData } from '../../types/types';
 import AppInput from '../../components/Input/AppInput';
 import AppButton from '../../components/Button/AppButton';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { Title, Text } = Typography;
 
@@ -33,21 +31,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { login, state: authState } = useAuth();
 
-  const onFinish = async (values: LoginFormData) => {
+  const onFinish = async (values: any) => {
     setLoading(true);
     
     try {
-      // TODO: Implement actual login logic here
-      // const response = await loginApi(values.email, values.password);
-      
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await login(values.email, values.password);
       message.success('Đăng nhập thành công!');
       navigate('/');
-      
     } catch (error) {
-      message.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!');
+      // Error is handled by AuthContext
     } finally {
       setLoading(false);
     }
@@ -78,7 +72,6 @@ export default function LoginPage() {
     >
       <Row justify="center" style={{ width: '100%', maxWidth: '1200px' }}>
         <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-          {/* Login Form Card */}
           <Card
             style={{
               borderRadius: '16px',
@@ -105,7 +98,7 @@ export default function LoginPage() {
               />
 
               <AppInput
-                name="Password"
+                name="password"
                 label="Mật khẩu"
                 rules={[
                   { required: true, message: 'Vui lòng nhập mật khẩu!' },
@@ -135,8 +128,9 @@ export default function LoginPage() {
                 <AppButton
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
-                  children={loading ? <Spin /> : 'Đăng nhập'}
+                  loading={loading || authState.isLoading}
+                  children={loading || authState.isLoading ? <Spin /> : 'Đăng nhập'}
+                  style={{ width: '100%' }}
                 />
               </Form.Item>
             </Form>

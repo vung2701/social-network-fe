@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, Card, Typography, Divider, Space, message, Checkbox, Row, Col, App, Spin } from 'antd';
+import { Form, Card, Typography, Divider, Space, message, Checkbox, Row, Col, Spin } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
@@ -9,9 +9,9 @@ import {
   FacebookOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import type { LoginFormData } from '../../types/types';
 import AppInput from '../../components/Input/AppInput';
 import AppButton from '../../components/Button/AppButton';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { Title, Text } = Typography;
 
@@ -19,35 +19,28 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { register, state: authState } = useAuth();
 
-  const onFinish = async (values: LoginFormData) => {
+  const onFinish = async (values: any) => {
     setLoading(true);
 
     try {
-      // TODO: Implement actual login logic here
-      // const response = await loginApi(values.email, values.password);
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      message.success('Đăng nhập thành công!');
-      navigate('/');
+      await register(values.email, values.password, values.confirmPassword);
+      message.success('Đăng ký thành công!');
+      navigate('/login');
     } catch (error) {
-      message.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!');
+      // Error is handled by AuthContext
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    message.info('Tính năng đăng nhập Google sẽ được phát triển sau');
+    message.info('Tính năng đăng ký Google sẽ được phát triển sau');
   };
 
   const handleFacebookLogin = () => {
-    message.info('Tính năng đăng nhập Facebook sẽ được phát triển sau');
-  };
-
-  const handleForgotPassword = () => {
-    message.info('Tính năng quên mật khẩu sẽ được phát triển sau');
+    message.info('Tính năng đăng ký Facebook sẽ được phát triển sau');
   };
 
   return (
@@ -63,7 +56,6 @@ export default function RegisterPage() {
     >
       <Row justify="center" style={{ width: '100%', maxWidth: '1200px' }}>
         <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-          {/* Login Form Card */}
           <Card
             style={{
               borderRadius: '16px',
@@ -76,7 +68,7 @@ export default function RegisterPage() {
               Đăng ký
             </Title>
 
-            <Form form={form} name="login" onFinish={onFinish} autoComplete="off" layout="vertical" size="large">
+            <Form form={form} name="register" onFinish={onFinish} autoComplete="off" layout="vertical" size="large">
               <AppInput
                 name="email"
                 label="Email"
@@ -90,11 +82,15 @@ export default function RegisterPage() {
               />
 
               <AppInput
-                name="Password"
+                name="password"
                 label="Mật khẩu"
                 rules={[
                   { required: true, message: 'Vui lòng nhập mật khẩu!' },
-                  { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
+                  { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự!' },
+                  { 
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                    message: 'Mật khẩu phải chứa chữ hoa, chữ thường và số!'
+                  }
                 ]}
                 prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
                 placeholder="Nhập mật khẩu của bạn"
@@ -102,38 +98,46 @@ export default function RegisterPage() {
               />
 
               <AppInput
-                name="Confirm Password"
+                name="confirmPassword"
                 label="Nhập lại mật khẩu"
                 rules={[
-                  { required: true, message: 'Vui lòng nhập mật khẩu!' },
-                  { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }
+                  { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
+                  ({ getFieldValue }: any) => ({
+                    validator(_: any, value: string) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));
+                    },
+                  }),
                 ]}
                 prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
-                placeholder="Nhập mật khẩu của bạn"
+                placeholder="Nhập lại mật khẩu của bạn"
                 iconRender={(visible: boolean) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-              />/
+              />
 
-              <Form.Item>
-                <Row justify="space-between" align="middle">
-                  <Col>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                      <Checkbox>Ghi nhớ đăng nhập</Checkbox>
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Button type="link" onClick={handleForgotPassword} style={{ padding: 0 }}>
-                      Quên mật khẩu?
-                    </Button>
-                  </Col>
-                </Row>
+              <Form.Item
+                name="agreeToTerms"
+                valuePropName="checked"
+                rules={[
+                  {
+                    validator: (_: any, value: boolean) =>
+                      value ? Promise.resolve() : Promise.reject(new Error('Vui lòng đồng ý với điều khoản sử dụng!')),
+                  },
+                ]}
+              >
+                <Checkbox>
+                  Tôi đồng ý với <Link to="/terms">điều khoản sử dụng</Link> và <Link to="/privacy">chính sách bảo mật</Link>
+                </Checkbox>
               </Form.Item>
 
               <Form.Item>
                 <AppButton
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
-                  children={loading ? <Spin /> : 'Đăng nhập'}
+                  loading={loading || authState.isLoading}
+                  children={loading || authState.isLoading ? <Spin /> : 'Đăng ký'}
+                  style={{ width: '100%' }}
                 />
               </Form.Item>
             </Form>
@@ -166,7 +170,7 @@ export default function RegisterPage() {
 
             <div style={{ textAlign: 'center', marginTop: '24px' }}>
               <Text style={{ color: '#666' }}>Bạn đã có tài khoản? </Text>
-              <Link to="/register" style={{ fontWeight: '600' }}>
+              <Link to="/login" style={{ fontWeight: '600' }}>
                 Đăng nhập
               </Link>
             </div>
