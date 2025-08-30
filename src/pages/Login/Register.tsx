@@ -11,7 +11,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import AppInput from '../../components/Input/AppInput';
 import AppButton from '../../components/Button/AppButton';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks';
 
 const { Title, Text } = Typography;
 
