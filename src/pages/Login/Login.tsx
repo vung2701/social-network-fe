@@ -84,7 +84,15 @@ export default function LoginPage() {
               Đăng nhập
             </Title>
 
-            <Form form={form} name="login" onFinish={onFinish} autoComplete="off" layout="vertical" size="large">
+            <Form
+              form={form}
+              name="login"
+              onFinish={onFinish}
+              autoComplete="off"
+              layout="vertical"
+              size="large"
+              validateTrigger={['onSubmit']}
+            >
               <AppInput
                 name="email"
                 label="Email"
@@ -129,7 +137,7 @@ export default function LoginPage() {
                   type="primary"
                   htmlType="submit"
                   loading={loading || authState.isLoading}
-                  children={loading || authState.isLoading ? <Spin /> : 'Đăng nhập'}
+                  children={'Đăng nhập'}
                   style={{ width: '100%' }}
                 />
               </Form.Item>

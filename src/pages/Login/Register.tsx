@@ -68,7 +68,15 @@ export default function RegisterPage() {
               Đăng ký
             </Title>
 
-            <Form form={form} name="register" onFinish={onFinish} autoComplete="off" layout="vertical" size="large">
+            <Form
+              form={form}
+              name="register"
+              onFinish={onFinish}
+              autoComplete="off"
+              layout="vertical"
+              size="large"
+              validateTrigger={['onSubmit']}
+            >
               <AppInput
                 name="email"
                 label="Email"
@@ -87,7 +95,7 @@ export default function RegisterPage() {
                 rules={[
                   { required: true, message: 'Vui lòng nhập mật khẩu!' },
                   { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự!' },
-                  { 
+                  {
                     pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
                     message: 'Mật khẩu phải chứa chữ hoa, chữ thường và số!'
                   }
@@ -108,8 +116,8 @@ export default function RegisterPage() {
                         return Promise.resolve();
                       }
                       return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));
-                    },
-                  }),
+                    }
+                  })
                 ]}
                 prefix={<LockOutlined style={{ color: '#bfbfbf' }} />}
                 placeholder="Nhập lại mật khẩu của bạn"
@@ -122,12 +130,13 @@ export default function RegisterPage() {
                 rules={[
                   {
                     validator: (_: any, value: boolean) =>
-                      value ? Promise.resolve() : Promise.reject(new Error('Vui lòng đồng ý với điều khoản sử dụng!')),
-                  },
+                      value ? Promise.resolve() : Promise.reject(new Error('Vui lòng đồng ý với điều khoản sử dụng!'))
+                  }
                 ]}
               >
                 <Checkbox>
-                  Tôi đồng ý với <Link to="/terms">điều khoản sử dụng</Link> và <Link to="/privacy">chính sách bảo mật</Link>
+                  Tôi đồng ý với <Link to="/terms">điều khoản sử dụng</Link> và{' '}
+                  <Link to="/privacy">chính sách bảo mật</Link>
                 </Checkbox>
               </Form.Item>
 
@@ -136,14 +145,12 @@ export default function RegisterPage() {
                   type="primary"
                   htmlType="submit"
                   loading={loading || authState.isLoading}
-                  children={loading || authState.isLoading ? <Spin /> : 'Đăng ký'}
+                  children={'Đăng ký'}
                   style={{ width: '100%' }}
                 />
               </Form.Item>
             </Form>
-
             <Divider>hoặc</Divider>
-
             <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }} size="large">
               <AppButton
                 icon={<GoogleOutlined />}
@@ -167,7 +174,6 @@ export default function RegisterPage() {
                 }}
               />
             </Space>
-
             <div style={{ textAlign: 'center', marginTop: '24px' }}>
               <Text style={{ color: '#666' }}>Bạn đã có tài khoản? </Text>
               <Link to="/login" style={{ fontWeight: '600' }}>
