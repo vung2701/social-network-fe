@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks';
 
 // Layout
 import Layout from '../layouts/Layout/Layout';
@@ -19,9 +20,6 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, isAuthenticated = false }: ProtectedRouteProps) => {
-  // TODO: Implement authentication logic here
-  // const isAuthenticated = useAuth(); // Hook để kiểm tra authentication
-  
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -36,9 +34,6 @@ interface PublicRouteProps {
 }
 
 const PublicRoute = ({ children, isAuthenticated = false }: PublicRouteProps) => {
-  // TODO: Implement authentication logic here
-  // const isAuthenticated = useAuth();
-  
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
@@ -47,13 +42,12 @@ const PublicRoute = ({ children, isAuthenticated = false }: PublicRouteProps) =>
 };
 
 export default function AppRouter() {
-  // TODO: Replace with actual authentication state
-  const isAuthenticated = false; // This should come from your auth context/store
+  const { state } = useAuth();
+  const isAuthenticated = state.isAuthenticated;
   
   return (
     <Suspense fallback={<PageLoading />}>
       <Routes>
-        {/* Public Routes - No Layout */}
         <Route 
           path="/login" 
           element={

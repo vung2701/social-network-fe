@@ -1,12 +1,15 @@
 import { Layout, Menu, Dropdown, Avatar, Space } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HomeOutlined, MessageOutlined, UserOutlined, LogoutOutlined, AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
+import { useAuth } from '../../hooks';
 
 const { Header } = Layout;
 
 export default function AppHeader() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   
   // menu chính
   const mainMenu: MenuProps['items'] = [
@@ -40,7 +43,10 @@ export default function AppHeader() {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: <span>Logout</span>
+      label: <span onClick={() => {
+        logout(); // Clear authentication state
+        navigate('/login'); // Redirect to login page
+      }}>Logout</span>
     }
   ];
 

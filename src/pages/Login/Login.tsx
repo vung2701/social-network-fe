@@ -41,7 +41,6 @@ export default function LoginPage() {
       message.success('Đăng nhập thành công!');
       navigate('/');
     } catch (error) {
-      // Error is handled by AuthContext
     } finally {
       setLoading(false);
     }
