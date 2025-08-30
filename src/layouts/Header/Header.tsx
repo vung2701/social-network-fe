@@ -44,8 +44,8 @@ export default function AppHeader() {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: <span onClick={() => {
-        logout(); // Clear authentication state
-        navigate('/login'); // Redirect to login page
+        logout();
+        navigate('/login');
       }}>Logout</span>
     }
   ];

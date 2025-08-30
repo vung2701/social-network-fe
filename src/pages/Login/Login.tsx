@@ -107,6 +107,7 @@ export default function LoginPage() {
               <AppInput
                 name="password"
                 label="Mật khẩu"
+                type="password"
                 rules={[
                   { required: true, message: 'Vui lòng nhập mật khẩu!' },
                   { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }

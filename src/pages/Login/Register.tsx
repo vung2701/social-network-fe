@@ -92,6 +92,7 @@ export default function RegisterPage() {
               <AppInput
                 name="password"
                 label="Mật khẩu"
+                type="password"
                 rules={[
                   { required: true, message: 'Vui lòng nhập mật khẩu!' },
                   { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự!' },
@@ -108,6 +109,7 @@ export default function RegisterPage() {
               <AppInput
                 name="confirmPassword"
                 label="Nhập lại mật khẩu"
+                type="password"
                 rules={[
                   { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
                   ({ getFieldValue }: any) => ({

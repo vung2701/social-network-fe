@@ -27,7 +27,6 @@ const ProtectedRoute = ({ children, isAuthenticated = false }: ProtectedRoutePro
   return <>{children}</>;
 };
 
-// Public Route component (redirect to home if already authenticated)
 interface PublicRouteProps {
   children: React.ReactNode;
   isAuthenticated?: boolean;
