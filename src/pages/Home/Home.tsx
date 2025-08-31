@@ -1,10 +1,10 @@
 import React from 'react';
+import Feed from './components/Feed';
 
 const Home: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
-      <h1>Welcome to SocialApp</h1>
-      <p>This is the home page of your social network application.</p>
+      <Feed />
     </div>
   );
 };

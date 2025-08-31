@@ -8,6 +8,8 @@ import Layout from '../layouts/Layout/Layout';
 // Loading component
 import { PageLoading } from '../components/Loading/Loading';
 import RegisterPage from '../pages/Login/Register';
+import Profile from '../pages/Profile/Profile';
+import Chat from '../pages/Chat/Chat';
 
 // Lazy load pages - chỉ import các page đã tồn tại
 const Login = lazy(() => import('../pages/Login/Login'));
@@ -75,16 +77,14 @@ export default function AppRouter() {
         >
           <Route index element={<Home />} />
           
-          {/* TODO: Add more routes here when pages are created */}
-          {/* Example:
+          Example:
           <Route path="/profile" element={<Profile />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          */}
+          {/* <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} /> */}
+         
         </Route>
         
-        {/* Catch all route - redirect to home */}
         <Route 
           path="*" 
           element={<Navigate to="/" replace />} 
