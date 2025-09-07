@@ -10,3 +10,31 @@ export interface Post {
   isLiked?: boolean;
   image?: string;
 }
+
+export interface CreatePostProps {
+  onPostCreated?: (post: any) => void;
+}
+
+export interface PostListProps {
+  posts: Post[];
+  loading?: boolean;
+  onLike?: (postId: string) => void;
+  onComment?: (postId: string) => void;
+  onShare?: (postId: string) => void;
+}
+
+export interface PostCardProps {
+  post: Post;
+  onLike?: (postId: string) => void;
+  onComment?: (postId: string) => void;
+  onShare?: (postId: string) => void;
+}
+
+export interface PostActionsProps {
+  postId: string;
+  isLiked?: boolean;
+  onLike: (postId: string) => void;
+  onComment: (postId: string) => void;
+  onShare: (postId: string) => void;
+  onToggleComments: () => void;
+}

@@ -55,6 +55,4 @@ const PostHeader: React.FC<PostHeaderProps> = React.memo(({ author, timeAgo }) =
   );
 });
 
-PostHeader.displayName = 'PostHeader';
-
 export default PostHeader;

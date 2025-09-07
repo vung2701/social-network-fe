@@ -1,37 +1,23 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Card, Avatar, Space, Button, Typography, Divider } from 'antd';
-import { 
-  UserOutlined, 
-  HeartOutlined, 
-  HeartFilled, 
-  MessageOutlined, 
-  ShareAltOutlined,
-  MoreOutlined
-} from '@ant-design/icons';
+import { Card, Space, Typography, Divider } from 'antd';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import PostHeader from './PostHeader';
 import PostContent from './PostContent';
 import PostActions from './PostActions';
 import CommentList from './CommentList';
-import type { Post } from '../../../types';
+import type { PostCardProps } from '../../../types';
 
 const { Text } = Typography;
 
-interface PostCardProps {
-  post: Post;
-  onLike?: (postId: string) => void;
-  onComment?: (postId: string) => void;
-  onShare?: (postId: string) => void;
-}
 
 const PostCard: React.FC<PostCardProps> = React.memo(({ 
   post, 
-  // onLike, 
-  // onComment, 
-  // onShare 
+  onLike, 
+  onComment, 
+  onShare 
 }) => {
-  // const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   const timeAgo = useMemo(() => {
     try {
@@ -44,21 +30,21 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
     }
   }, [post.createdAt]);
 
-  // const handleToggleComments = useCallback(() => {
-  //   setShowComments(prev => !prev);
-  // }, []);
+  const handleToggleComments = useCallback(() => {
+    setShowComments(prev => !prev);
+  }, []);
 
-  // const handleLike = useCallback(() => {
-  //   onLike?.(post.id);
-  // }, [post.id, onLike]);
+  const handleLike = useCallback(() => {
+    onLike?.(post.id);
+  }, [post.id, onLike]);
 
-  // const handleComment = useCallback(() => {
-  //   onComment?.(post.id);
-  // }, [post.id, onComment]);
+  const handleComment = useCallback(() => {
+    onComment?.(post.id);
+  }, [post.id, onComment]);
 
-  // const handleShare = useCallback(() => {
-  //   onShare?.(post.id);
-  // }, [post.id, onShare]);
+  const handleShare = useCallback(() => {
+    onShare?.(post.id);
+  }, [post.id, onShare]);
 
   return (
     <Card 
@@ -82,7 +68,7 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
         />
 
         {/* Post Stats */}
-        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text type="secondary" style={{ fontSize: '14px' }}>
             {post.likes > 0 && `${post.likes} lượt thích`}
             {post.comments.length > 0 && post.likes > 0 && ' • '}
@@ -90,25 +76,25 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
           </Text>
         </div>
 
-        <Divider style={{ margin: '8px 0' }} /> */}
+        <Divider style={{ margin: '8px 0' }} />
 
         {/* Post Actions */}
-        {/* <PostActions
+        <PostActions
           postId={post.id}
           isLiked={post.isLiked}
           onLike={handleLike}
           onComment={handleComment}
           onShare={handleShare}
           onToggleComments={handleToggleComments}
-        /> */}
+        />
 
         {/* Comments Section */}
-        {/* {showComments && (
+        {showComments && (
           <CommentList 
             comments={post.comments}
             postId={post.id}
           />
-        )} */}
+        )}
       </Space>
     </Card>
   );

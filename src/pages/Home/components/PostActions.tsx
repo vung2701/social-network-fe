@@ -6,15 +6,7 @@ import {
   MessageOutlined, 
   ShareAltOutlined 
 } from '@ant-design/icons';
-
-interface PostActionsProps {
-  postId: string;
-  isLiked: boolean;
-  onLike: (postId: string) => void;
-  onComment: (postId: string) => void;
-  onShare: (postId: string) => void;
-  onToggleComments: () => void;
-}
+import type { PostActionsProps } from '../../../types';
 
 const PostActions: React.FC<PostActionsProps> = React.memo(({
   postId,

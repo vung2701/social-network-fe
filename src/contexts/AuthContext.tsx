@@ -53,8 +53,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   }
 };
 
-
-
 // Create Context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

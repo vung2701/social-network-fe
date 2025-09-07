@@ -1,13 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Card, Input, Button, Avatar, Space } from 'antd';
+import { Card, Button, Avatar, Space } from 'antd';
 import { UserOutlined, SendOutlined } from '@ant-design/icons';
 import { useAuth } from '../../../hooks';
+import type { CreatePostProps } from '../../../types';
+import AppTextArea from '../../../components/TextArea/AppTextArea';
+import AppButton from '../../../components/Button/AppButton';
 
-const { TextArea } = Input;
-
-interface CreatePostProps {
-  onPostCreated?: (post: any) => void;
-}
 
 const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => {
   const [content, setContent] = useState('');
@@ -54,8 +52,8 @@ const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => 
   }, [handleSubmit]);
 
   return (
-    <Card 
-      style={{ 
+    <Card
+      style={{
         marginBottom: '16px',
         borderRadius: '12px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
@@ -63,20 +61,15 @@ const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => 
     >
       <Space direction="vertical" style={{ width: '100%' }} size="middle">
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <Avatar 
-            size={40} 
-            icon={<UserOutlined />} 
-            src={state.user?.avatar}
-            style={{ backgroundColor: '#87d068' }}
-          />
+          <Avatar size={40} icon={<UserOutlined />} src={state.user?.avatar} style={{ backgroundColor: '#87d068' }} />
           <div style={{ flex: 1 }}>
-            <TextArea
+            <AppTextArea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Bạn đang nghĩ gì?"
               autoSize={{ minRows: 2, maxRows: 4 }}
-              style={{ 
+              style={{
                 border: 'none',
                 resize: 'none',
                 fontSize: '16px'
@@ -84,18 +77,20 @@ const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => 
             />
           </div>
         </div>
-        
+
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
+          <AppButton
             type="primary"
-            icon={<SendOutlined />}
             onClick={handleSubmit}
             loading={isSubmitting}
             disabled={!content.trim()}
-            style={{ borderRadius: '20px' }}
+            style={{
+              borderRadius: '20px',
+              width: '120px'
+            }}
           >
-            Đăng bài
-          </Button>
+            Đăng bài <SendOutlined />
+          </AppButton>
         </div>
       </Space>
     </Card>

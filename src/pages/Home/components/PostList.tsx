@@ -1,22 +1,16 @@
 import React, { useMemo, useCallback } from 'react';
 import { Empty, Spin } from 'antd';
 import PostCard from './PostCard';
-import type { Post } from '../../../types';
+import type { Post, PostListProps } from '../../../types';
 
-interface PostListProps {
-  posts: Post[];
-  loading?: boolean;
-  // onLike?: (postId: string) => void;
-  // onComment?: (postId: string) => void;
-  // onShare?: (postId: string) => void;
-}
+
 
 const PostList: React.FC<PostListProps> = React.memo(({ 
   posts, 
   loading = false,
-  // onLike,
-  // onComment,
-  // onShare
+  onLike,
+  onComment,
+  onShare
 }) => {
   // Sử dụng useMemo để sort posts theo thời gian (mới nhất lên đầu)
   const sortedPosts = useMemo(() => {
@@ -26,17 +20,17 @@ const PostList: React.FC<PostListProps> = React.memo(({
   }, [posts]);
 
   // Sử dụng useCallback để tạo handlers
-  // const handleLike = useCallback((postId: string) => {
-  //   onLike?.(postId);
-  // }, [onLike]);
+  const handleLike = useCallback((postId: string) => {
+    onLike?.(postId);
+  }, [onLike]);
 
-  // const handleComment = useCallback((postId: string) => {
-  //   onComment?.(postId);
-  // }, [onComment]);
+  const handleComment = useCallback((postId: string) => {
+    onComment?.(postId);
+  }, [onComment]);
 
-  // const handleShare = useCallback((postId: string) => {
-  //   onShare?.(postId);
-  // }, [onShare]);
+  const handleShare = useCallback((postId: string) => {
+    onShare?.(postId);
+  }, [onShare]);
 
   if (loading) {
     return (
@@ -64,15 +58,13 @@ const PostList: React.FC<PostListProps> = React.memo(({
         <PostCard
           key={post.id}
           post={post}
-          // onLike={handleLike}
-          // onComment={handleComment}
-          // onShare={handleShare}
+          onLike={handleLike}
+          onComment={handleComment}
+          onShare={handleShare}
         />
       ))}
     </div>
   );
 });
-
-PostList.displayName = 'PostList';
 
 export default PostList;
