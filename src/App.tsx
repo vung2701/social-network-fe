@@ -1,12 +1,14 @@
 import './App.css'
 import AppRouter from './router/Routers'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, ThemeProvider } from './contexts'
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRouter />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

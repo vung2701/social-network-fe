@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HomeOutlined, MessageOutlined, UserOutlined, LogoutOutlined, AppstoreOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useAuth } from '../../hooks';
+import ThemeToggle from '../../components/ThemeToggle';
 
 const { Header } = Layout;
 
@@ -75,6 +76,11 @@ export default function AppHeader() {
           items={mainMenu}
           style={{ flex: 1, marginLeft: '24px' }}
         />
+
+        {/* Theme Toggle */}
+        <div style={{ marginRight: '16px' }}>
+          <ThemeToggle />
+        </div>
 
         <Dropdown menu={{ items: userMenu }} placement="bottomRight">
           <Space style={{ cursor: 'pointer' }}>
