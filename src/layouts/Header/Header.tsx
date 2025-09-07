@@ -77,16 +77,15 @@ export default function AppHeader() {
           style={{ flex: 1, marginLeft: '24px' }}
         />
 
-        {/* Theme Toggle */}
-        <div style={{ marginRight: '16px' }}>
+        {/* Theme Toggle và User Menu */}
+        <Space size="middle">
           <ThemeToggle />
-        </div>
-
-        <Dropdown menu={{ items: userMenu }} placement="bottomRight">
-          <Space style={{ cursor: 'pointer' }}>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-          </Space>
-        </Dropdown>
+          <Dropdown menu={{ items: userMenu }} placement="bottomRight">
+            <Space style={{ cursor: 'pointer' }}>
+              <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+            </Space>
+          </Dropdown>
+        </Space>
       </div>
     </Header>
   );

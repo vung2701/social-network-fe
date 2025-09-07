@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button, Space, Typography } from 'antd';
-import { SunOutlined, MoonOutlined, DesktopOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Space } from 'antd';
+import { SunOutlined, MoonOutlined, DesktopOutlined, SettingOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
 import { useTheme } from '../../contexts';
-
-const { Text } = Typography;
 
 /**
  * Component để toggle theme (light/dark/system)
- * Hiển thị button để chuyển đổi giữa các theme modes
+ * Hiển thị button dropdown với các tùy chọn theme
  */
 const ThemeToggle: React.FC = () => {
   const { state, setTheme, toggleTheme, setSystemTheme } = useTheme();
@@ -33,46 +32,55 @@ const ThemeToggle: React.FC = () => {
     setSystemTheme(true);
   };
 
+  // Menu items cho dropdown
+  const themeMenuItems: MenuProps['items'] = [
+    {
+      key: 'light',
+      icon: <SunOutlined />,
+      label: 'Light Mode',
+      onClick: handleLightTheme,
+    },
+    {
+      key: 'dark',
+      icon: <MoonOutlined />,
+      label: 'Dark Mode',
+      onClick: handleDarkTheme,
+    },
+    {
+      key: 'system',
+      icon: <DesktopOutlined />,
+      label: 'System Theme',
+      onClick: handleSystemTheme,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'toggle',
+      icon: state.theme === 'dark' ? <SunOutlined /> : <MoonOutlined />,
+      label: 'Toggle Theme',
+      onClick: toggleTheme,
+    },
+  ];
+
   return (
-    <Space direction="vertical" size="small">
-      <Text strong>Theme Settings</Text>
-      <Space wrap>
-        <Button
-          type={state.theme === 'light' && !state.isSystemTheme ? 'primary' : 'default'}
-          icon={<SunOutlined />}
-          onClick={handleLightTheme}
-          size="small"
-        >
-          Light
-        </Button>
-        <Button
-          type={state.theme === 'dark' && !state.isSystemTheme ? 'primary' : 'default'}
-          icon={<MoonOutlined />}
-          onClick={handleDarkTheme}
-          size="small"
-        >
-          Dark
-        </Button>
-        <Button
-          type={state.isSystemTheme ? 'primary' : 'default'}
-          icon={<DesktopOutlined />}
-          onClick={handleSystemTheme}
-          size="small"
-        >
-          System
-        </Button>
-        <Button
-          icon={state.theme === 'dark' ? <SunOutlined /> : <MoonOutlined />}
-          onClick={toggleTheme}
-          size="small"
-        >
-          Toggle
-        </Button>
-      </Space>
-      <Text type="secondary" style={{ fontSize: '12px' }}>
-        Current: {state.isSystemTheme ? 'System' : state.theme} mode
-      </Text>
-    </Space>
+    <Dropdown 
+      menu={{ items: themeMenuItems }} 
+      placement="bottomRight"
+      trigger={['click']}
+    >
+      <Button
+        type="text"
+        icon={<SettingOutlined />}
+        size="middle"
+        style={{
+          color: 'inherit',
+          border: 'none',
+          boxShadow: 'none',
+        }}
+        title="Theme Settings"
+      />
+    </Dropdown>
   );
 };
 
