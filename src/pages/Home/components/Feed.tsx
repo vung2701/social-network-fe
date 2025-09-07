@@ -5,7 +5,6 @@ import PostList from './PostList';
 import type { Post } from '../../../types';
 
 const Feed: React.FC = () => {
-  // Mock data cho posts
   const [posts, setPosts] = useState<Post[]>([
     {
       id: '1',
@@ -71,34 +70,33 @@ const Feed: React.FC = () => {
     }
   ]);
 
-  // // Sử dụng useCallback để tạo handlers
   const handlePostCreated = useCallback((newPost: Post) => {
     setPosts(prevPosts => [newPost, ...prevPosts]);
   }, []);
 
-  // const handleLike = useCallback((postId: string) => {
-  //   setPosts(prevPosts => 
-  //     prevPosts.map(post => 
-  //       post.id === postId 
-  //         ? { 
-  //             ...post, 
-  //             isLiked: !post.isLiked,
-  //             likes: post.isLiked ? post.likes - 1 : post.likes + 1
-  //           }
-  //         : post
-  //     )
-  //   );
-  // }, []);
+  const handleLike = useCallback((postId: string) => {
+    setPosts(prevPosts => 
+      prevPosts.map(post => 
+        post.id === postId 
+          ? { 
+              ...post, 
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1
+            }
+          : post
+      )
+    );
+  }, []);
 
-  // const handleComment = useCallback((postId: string) => {
-  //   // Logic xử lý comment sẽ được implement sau
-  //   console.log('Comment on post:', postId);
-  // }, []);
+  const handleComment = useCallback((postId: string) => {
+    // Logic xử lý comment sẽ được implement sau
+    console.log('Comment on post:', postId);
+  }, []);
 
-  // const handleShare = useCallback((postId: string) => {
-  //   // Logic xử lý share sẽ được implement sau
-  //   console.log('Share post:', postId);
-  // }, []);
+  const handleShare = useCallback((postId: string) => {
+    // Logic xử lý share sẽ được implement sau
+    console.log('Share post:', postId);
+  }, []);
 
   return (
     <Row justify="center">
@@ -110,9 +108,9 @@ const Feed: React.FC = () => {
           {/* Posts List */}
           <PostList
             posts={posts}
-            // onLike={handleLike}
-            // onComment={handleComment}
-            // onShare={handleShare}
+            onLike={handleLike}
+            onComment={handleComment}
+            onShare={handleShare}
           />
         </div>
       </Col>

@@ -100,6 +100,4 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
   );
 });
 
-PostCard.displayName = 'PostCard';
-
 export default PostCard;

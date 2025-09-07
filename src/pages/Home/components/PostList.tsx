@@ -1,9 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { Empty, Spin } from 'antd';
 import PostCard from './PostCard';
-import type { Post, PostListProps } from '../../../types';
-
-
+import type { PostListProps } from '../../../types';
 
 const PostList: React.FC<PostListProps> = React.memo(({ 
   posts, 

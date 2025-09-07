@@ -48,6 +48,4 @@ const PostContent: React.FC<PostContentProps> = React.memo(({ content, image }) 
   );
 });
 
-PostContent.displayName = 'PostContent';
-
 export default PostContent;

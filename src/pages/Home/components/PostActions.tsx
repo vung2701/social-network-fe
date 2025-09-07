@@ -74,6 +74,4 @@ const PostActions: React.FC<PostActionsProps> = React.memo(({
   );
 });
 
-PostActions.displayName = 'PostActions';
-
 export default PostActions;

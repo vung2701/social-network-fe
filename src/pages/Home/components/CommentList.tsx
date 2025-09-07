@@ -40,10 +40,8 @@ const CommentList: React.FC<CommentListProps> = React.memo(({ comments, postId }
     setIsSubmitting(true);
     
     try {
-      // Mock API call để thêm comment
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // TODO: Implement actual comment API
       console.log('Adding comment:', { postId, content: newComment });
       
       setNewComment('');
@@ -86,7 +84,6 @@ const CommentList: React.FC<CommentListProps> = React.memo(({ comments, postId }
 
   return (
     <div style={{ marginTop: '16px' }}>
-      {/* Add Comment Form */}
       <div style={{ marginBottom: '16px' }}>
         <Space direction="vertical" style={{ width: '100%' }} size="small">
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
@@ -126,7 +123,6 @@ const CommentList: React.FC<CommentListProps> = React.memo(({ comments, postId }
         </Space>
       </div>
 
-      {/* Comments List */}
       {sortedComments.length > 0 && (
         <List
           dataSource={sortedComments}
@@ -142,6 +138,5 @@ const CommentList: React.FC<CommentListProps> = React.memo(({ comments, postId }
   );
 });
 
-CommentList.displayName = 'CommentList';
 
 export default CommentList;
