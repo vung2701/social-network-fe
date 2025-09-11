@@ -53,22 +53,32 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
         borderRadius: '12px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
       }}
+      role="article"
+      aria-labelledby={`post-title-${post.id}`}
+      aria-describedby={`post-content-${post.id}`}
     >
       <Space direction="vertical" style={{ width: '100%' }} size="middle">
         {/* Post Header */}
         <PostHeader 
           author={post.author}
           timeAgo={timeAgo}
+          postId={post.id}
         />
 
         {/* Post Content */}
         <PostContent 
           content={post.content}
           image={post.image}
+          postId={post.id}
         />
 
         {/* Post Stats */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div 
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          role="status"
+          aria-live="polite"
+          aria-label={`Bài viết có ${post.likes} lượt thích và ${post.comments.length} bình luận`}
+        >
           <Text type="secondary" style={{ fontSize: '14px' }}>
             {post.likes > 0 && `${post.likes} lượt thích`}
             {post.comments.length > 0 && post.likes > 0 && ' • '}
@@ -90,14 +100,23 @@ const PostCard: React.FC<PostCardProps> = React.memo(({
 
         {/* Comments Section */}
         {showComments && (
-          <CommentList 
-            comments={post.comments}
-            postId={post.id}
-          />
+          <div 
+            role="region"
+            aria-label="Bình luận bài viết"
+            aria-expanded={showComments}
+          >
+            <CommentList 
+              comments={post.comments}
+              postId={post.id}
+            />
+          </div>
         )}
       </Space>
     </Card>
   );
 });
+
+// Thêm displayName để dễ debug trong React DevTools
+PostCard.displayName = 'PostCard';
 
 export default PostCard;

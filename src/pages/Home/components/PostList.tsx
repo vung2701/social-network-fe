@@ -65,4 +65,7 @@ const PostList: React.FC<PostListProps> = React.memo(({
   );
 });
 
+// Thêm displayName để dễ debug trong React DevTools
+PostList.displayName = 'PostList';
+
 export default PostList;

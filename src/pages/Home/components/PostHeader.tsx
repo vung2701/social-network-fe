@@ -9,9 +9,10 @@ const { Text, Title } = Typography;
 interface PostHeaderProps {
   author: User;
   timeAgo: string;
+  postId: string;
 }
 
-const PostHeader: React.FC<PostHeaderProps> = React.memo(({ author, timeAgo }) => {
+const PostHeader: React.FC<PostHeaderProps> = React.memo(({ author, timeAgo, postId }) => {
   const menuItems: MenuProps['items'] = [
     {
       key: 'report',
@@ -34,7 +35,11 @@ const PostHeader: React.FC<PostHeaderProps> = React.memo(({ author, timeAgo }) =
           style={{ backgroundColor: '#87d068' }}
         />
         <div>
-          <Title level={5} style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>
+          <Title 
+            level={5} 
+            style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}
+            id={`post-title-${postId}`}
+          >
             {author.name}
           </Title>
           <Text type="secondary" style={{ fontSize: '12px' }}>
@@ -54,5 +59,8 @@ const PostHeader: React.FC<PostHeaderProps> = React.memo(({ author, timeAgo }) =
     </div>
   );
 });
+
+// Thêm displayName để dễ debug trong React DevTools
+PostHeader.displayName = 'PostHeader';
 
 export default PostHeader;

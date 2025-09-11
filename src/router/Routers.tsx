@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '../hooks';
 
 // Layout
@@ -8,12 +8,11 @@ import Layout from '../layouts/Layout/Layout';
 // Loading component
 import { PageLoading } from '../components/Loading/Loading';
 import RegisterPage from '../pages/Login/Register';
-import Profile from '../pages/Profile/Profile';
-import Chat from '../pages/Chat/Chat';
-
 // Lazy load pages - chỉ import các page đã tồn tại
 const Login = lazy(() => import('../pages/Login/Login'));
 const Home = lazy(() => import('../pages/Home/Home'));
+const Chat = lazy(() => import('../pages/Chat/Chat'));
+const Profile = lazy(() => import('../pages/Profile/Profile'));
 
 // Protected Route component
 interface ProtectedRouteProps {
@@ -25,7 +24,7 @@ const ProtectedRoute = ({ children, isAuthenticated = false }: ProtectedRoutePro
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -38,57 +37,53 @@ const PublicRoute = ({ children, isAuthenticated = false }: PublicRouteProps) =>
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
 export default function AppRouter() {
   const { state } = useAuth();
   const isAuthenticated = state.isAuthenticated;
-  
+
   return (
     <Suspense fallback={<PageLoading />}>
       <Routes>
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
             <PublicRoute isAuthenticated={isAuthenticated}>
               <Login />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/register" 
+        <Route
+          path="/register"
           element={
             <PublicRoute isAuthenticated={isAuthenticated}>
               <RegisterPage />
             </PublicRoute>
-          } 
+          }
         />
-        
+
         {/* Protected Routes - With Layout */}
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <Layout />
             </ProtectedRoute>
-          } 
+          }
         >
           <Route index element={<Home />} />
-          
-          Example:
+
+          {/* Lazy loaded routes */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/chat" element={<Chat />} />
           {/* <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} /> */}
-         
         </Route>
-        
-        <Route 
-          path="*" 
-          element={<Navigate to="/" replace />} 
-        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
