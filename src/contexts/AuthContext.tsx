@@ -1,57 +1,9 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext } from 'react';
 import type { ReactNode } from 'react';
-import type { User, AuthState, AuthAction, AuthContextType } from '../types/auth.types';
-
-// Initial State
-const initialState: AuthState = {
-  user: null,
-  isAuthenticated: false,
-  isLoading: false,
-  error: null,
-};
-
-// Reducer
-const authReducer = (state: AuthState, action: AuthAction): AuthState => {
-  switch (action.type) {
-    case 'AUTH_START':
-      return {
-        ...state,
-        isLoading: true,
-        error: null,
-      };
-    case 'AUTH_SUCCESS':
-      return {
-        ...state,
-        user: action.payload,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-      };
-    case 'AUTH_FAILURE':
-      return {
-        ...state,
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: action.payload,
-      };
-    case 'LOGOUT':
-      return {
-        ...state,
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-        error: null,
-      };
-    case 'CLEAR_ERROR':
-      return {
-        ...state,
-        error: null,
-      };
-    default:
-      return state;
-  }
-};
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { loginUser, registerUser, logout, clearError } from '../store/slices/authSlice';
+import { selectAuth } from '../store/slices/authSlice';
+import type { AuthContextType } from '../types/auth.types';
 
 // Create Context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,75 +14,31 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(selectAuth);
 
   const login = async (email: string, password: string) => {
-    dispatch({ type: 'AUTH_START' });
-    
-    try {
-      // TODO: Implement actual login API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock response
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-      };
-      
-      dispatch({ type: 'AUTH_SUCCESS', payload: mockUser });
-    } catch (error) {
-      dispatch({ 
-        type: 'AUTH_FAILURE', 
-        payload: 'Đăng nhập thất bại' 
-      });
-    }
+    dispatch(loginUser({ email, password }));
   };
 
   const register = async (email: string, password: string, confirmPassword: string) => {
-    if (password !== confirmPassword) {
-      dispatch({ 
-        type: 'AUTH_FAILURE', 
-        payload: 'Mật khẩu nhập lại không khớp' 
-      });
-      return;
-    }
-
-    dispatch({ type: 'AUTH_START' });
-    
-    try {
-      // TODO: Implement actual register API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-      };
-      
-      dispatch({ type: 'AUTH_SUCCESS', payload: mockUser });
-    } catch (error) {
-      dispatch({ 
-        type: 'AUTH_FAILURE', 
-        payload: 'Đăng ký thất bại' 
-      });
-    }
+    dispatch(registerUser({ email, password, confirmPassword }));
   };
 
-  const logout = () => {
-    dispatch({ type: 'LOGOUT' });
+  const logoutHandler = () => {
+    dispatch(logout());
   };
 
-  const clearError = () => {
-    dispatch({ type: 'CLEAR_ERROR' });
+  const clearErrorHandler = () => {
+    dispatch(clearError());
   };
 
   const contextValue: AuthContextType = {
     state,
     login,
     register,
-    logout,
-    clearError,
+    logout: logoutHandler,
+    clearError: clearErrorHandler,
   };
 
   return (

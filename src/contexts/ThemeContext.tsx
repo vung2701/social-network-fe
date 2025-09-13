@@ -1,18 +1,15 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setTheme, toggleTheme, setSystemTheme, initTheme, selectThemeState } from '../store/slices/themeSlice';
+import type { Theme } from '../store/slices/themeSlice';
 
 // Định nghĩa types cho Theme
-export type Theme = 'light' | 'dark';
+export type { Theme } from '../store/slices/themeSlice';
 
 export interface ThemeState {
   theme: Theme;
   isSystemTheme: boolean;
 }
-
-export type ThemeAction = 
-  | { type: 'SET_THEME'; payload: Theme }
-  | { type: 'TOGGLE_THEME' }
-  | { type: 'SET_SYSTEM_THEME'; payload: boolean }
-  | { type: 'INIT_THEME'; payload: Theme };
 
 export interface ThemeContextType {
   state: ThemeState;
@@ -20,42 +17,6 @@ export interface ThemeContextType {
   toggleTheme: () => void;
   setSystemTheme: (useSystem: boolean) => void;
 }
-
-// Initial State
-const initialState: ThemeState = {
-  theme: 'light',
-  isSystemTheme: true,
-};
-
-// Reducer để quản lý state của theme
-const themeReducer = (state: ThemeState, action: ThemeAction): ThemeState => {
-  switch (action.type) {
-    case 'SET_THEME':
-      return {
-        ...state,
-        theme: action.payload,
-        isSystemTheme: false,
-      };
-    case 'TOGGLE_THEME':
-      return {
-        ...state,
-        theme: state.theme === 'light' ? 'dark' : 'light',
-        isSystemTheme: false,
-      };
-    case 'SET_SYSTEM_THEME':
-      return {
-        ...state,
-        isSystemTheme: action.payload,
-      };
-    case 'INIT_THEME':
-      return {
-        ...state,
-        theme: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 // Create Context
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -66,7 +27,8 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(themeReducer, initialState);
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(selectThemeState);
 
   // Khởi tạo theme từ localStorage hoặc system preference
   useEffect(() => {
@@ -75,14 +37,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     
     if (savedTheme && !savedSystemTheme) {
       // Sử dụng theme đã lưu
-      dispatch({ type: 'INIT_THEME', payload: savedTheme });
+      dispatch(initTheme(savedTheme));
     } else {
       // Sử dụng system theme
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      dispatch({ type: 'INIT_THEME', payload: systemTheme });
-      dispatch({ type: 'SET_SYSTEM_THEME', payload: true });
+      dispatch(initTheme(systemTheme));
+      dispatch(setSystemTheme(true));
     }
-  }, []);
+  }, [dispatch]);
 
   // Lưu theme vào localStorage khi thay đổi
   useEffect(() => {
@@ -105,39 +67,39 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       
       const handleChange = (e: MediaQueryListEvent) => {
-        dispatch({ type: 'INIT_THEME', payload: e.matches ? 'dark' : 'light' });
+        dispatch(initTheme(e.matches ? 'dark' : 'light'));
       };
       
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
-  }, [state.isSystemTheme]);
+  }, [state.isSystemTheme, dispatch]);
 
   // Handler để set theme cụ thể
-  const setTheme = (theme: Theme) => {
-    dispatch({ type: 'SET_THEME', payload: theme });
+  const setThemeHandler = (theme: Theme) => {
+    dispatch(setTheme(theme));
   };
 
   // Handler để toggle theme
-  const toggleTheme = () => {
-    dispatch({ type: 'TOGGLE_THEME' });
+  const toggleThemeHandler = () => {
+    dispatch(toggleTheme());
   };
 
   // Handler để bật/tắt system theme
-  const setSystemTheme = (useSystem: boolean) => {
-    dispatch({ type: 'SET_SYSTEM_THEME', payload: useSystem });
+  const setSystemThemeHandler = (useSystem: boolean) => {
+    dispatch(setSystemTheme(useSystem));
     
     if (useSystem) {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      dispatch({ type: 'INIT_THEME', payload: systemTheme });
+      dispatch(initTheme(systemTheme));
     }
   };
 
   const contextValue: ThemeContextType = {
     state,
-    setTheme,
-    toggleTheme,
-    setSystemTheme,
+    setTheme: setThemeHandler,
+    toggleTheme: toggleThemeHandler,
+    setSystemTheme: setSystemThemeHandler,
   };
 
   return (

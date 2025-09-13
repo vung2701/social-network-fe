@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Card, Button, Avatar, Space } from 'antd';
+import { Card, Button, Avatar, Space, message } from 'antd';
 import { UserOutlined, SendOutlined } from '@ant-design/icons';
-import { useAuth } from '../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { createPost } from '../../../store/slices/postSlice';
+import { selectUser } from '../../../store/slices/authSlice';
 import type { CreatePostProps } from '../../../types';
 import AppTextArea from '../../../components/TextArea/AppTextArea';
 import AppButton from '../../../components/Button/AppButton';
@@ -9,40 +11,36 @@ import AppButton from '../../../components/Button/AppButton';
 
 const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => {
   const [content, setContent] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { state } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const isLoading = useAppSelector(state => state.posts.isLoading);
 
   const handleSubmit = useCallback(async () => {
     if (!content.trim()) return;
     
-    setIsSubmitting(true);
+    if (!user) {
+      message.warning('Vui lòng đăng nhập để tạo bài viết!');
+      return;
+    }
     
     try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const newPost = {
-        id: Date.now().toString(),
+      await dispatch(createPost({
         content: content.trim(),
         author: {
-          id: state.user?.id || '1',
-          name: state.user?.name || 'User',
-          avatar: state.user?.avatar || null,
+          id: user.id,
+          name: user.name || 'User',
+          avatar: user.avatar,
         },
-        createdAt: new Date().toISOString(),
-        likes: 0,
-        comments: [],
-        isLiked: false,
-      };
+      })).unwrap();
       
-      onPostCreated?.(newPost);
       setContent('');
+      message.success('Đăng bài thành công!');
+      onPostCreated?.({});
     } catch (error) {
+      message.error('Đăng bài thất bại!');
       console.error('Error creating post:', error);
-    } finally {
-      setIsSubmitting(false);
     }
-  }, [content, state.user, onPostCreated]);
+  }, [content, user, dispatch, onPostCreated]);
 
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -61,7 +59,7 @@ const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => 
     >
       <Space direction="vertical" style={{ width: '100%' }} size="middle">
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <Avatar size={40} icon={<UserOutlined />} src={state.user?.avatar} style={{ backgroundColor: '#87d068' }} />
+          <Avatar size={40} icon={<UserOutlined />} src={user?.avatar} style={{ backgroundColor: '#87d068' }} />
           <div style={{ flex: 1 }}>
             <AppTextArea
               value={content}
@@ -82,7 +80,7 @@ const CreatePost: React.FC<CreatePostProps> = React.memo(({ onPostCreated }) => 
           <AppButton
             type="primary"
             onClick={handleSubmit}
-            loading={isSubmitting}
+            loading={isLoading}
             disabled={!content.trim()}
             style={{
               borderRadius: '20px',

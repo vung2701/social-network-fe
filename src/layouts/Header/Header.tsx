@@ -1,9 +1,9 @@
-import { Layout, Menu, Dropdown, Avatar, Space } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { HomeOutlined, MessageOutlined, UserOutlined, LogoutOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { HomeOutlined, LogoutOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { useAuth } from '../../hooks';
+import { Avatar, Dropdown, Layout, Menu, Space } from 'antd';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from '../../components/ThemeToggle';
+import { useAuth } from '../../hooks';
 
 const { Header } = Layout;
 
@@ -11,7 +11,7 @@ export default function AppHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
-  
+
   // menu chính
   const mainMenu: MenuProps['items'] = [
     {
@@ -28,7 +28,7 @@ export default function AppHeader() {
       key: '/profile',
       icon: <UserOutlined />,
       label: <Link to="/profile">Profile</Link>
-    }
+    },
   ];
 
   // dropdown user menu
@@ -44,10 +44,16 @@ export default function AppHeader() {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: <span onClick={() => {
-        logout();
-        navigate('/login');
-      }}>Logout</span>
+      label: (
+        <span
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+        >
+          Logout
+        </span>
+      )
     }
   ];
 
@@ -63,7 +69,7 @@ export default function AppHeader() {
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         {/* Logo */}
