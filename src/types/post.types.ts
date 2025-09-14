@@ -1,12 +1,19 @@
 import type { User } from "./auth.types";
 
+export interface Comment {
+  id: string;
+  content: string;
+  author: User;
+  createdAt: string;
+}
+
 export interface Post {
   id: string;
   content: string;
   author: User;
   createdAt: string;
   likes: number;
-  comments: any[];
+  comments: Comment[];
   isLiked?: boolean;
   image?: string;
 }

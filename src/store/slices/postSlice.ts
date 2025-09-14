@@ -13,6 +13,7 @@ interface CreatePostData {
   content: string;
   author: {
     id: string;
+    email: string;
     name: string;
     avatar?: string | null;
   };
@@ -23,6 +24,7 @@ interface AddCommentData {
   content: string;
   author: {
     id: string;
+    email: string;
     name: string;
     avatar?: string | null;
   };
@@ -36,6 +38,7 @@ const initialState: PostState = {
       content: 'Chào mừng đến với mạng xã hội! Đây là bài viết đầu tiên.',
       author: {
         id: '1',
+        email: 'admin@example.com',
         name: 'Admin',
         avatar: null,
       },
@@ -47,6 +50,7 @@ const initialState: PostState = {
           content: 'Chào mừng bạn!',
           author: {
             id: '2',
+            email: 'user1@example.com',
             name: 'User1',
             avatar: null,
           },
@@ -60,6 +64,7 @@ const initialState: PostState = {
       content: 'Hôm nay thời tiết thật đẹp! 🌞',
       author: {
         id: '2',
+        email: 'user1@example.com',
         name: 'User1',
         avatar: null,
       },
