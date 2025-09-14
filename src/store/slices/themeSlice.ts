@@ -11,7 +11,7 @@ export interface ThemeState {
 // ===== 2. INITIAL STATE =====
 const initialState: ThemeState = {
   theme: 'light',
-  isSystemTheme: true,
+  isSystemTheme: false
 };
 
 // ===== 3. SLICE CREATION =====
@@ -32,8 +32,8 @@ export const themeSlice = createSlice({
     },
     initTheme: (state, action) => {
       state.theme = action.payload;
-    },
-  },
+    }
+  }
 });
 
 // ===== 4. EXPORT ACTIONS =====

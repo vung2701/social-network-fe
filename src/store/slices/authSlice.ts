@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { User } from '../../types/auth.types';
 
 // ===== 1. ĐỊNH NGHĨA TYPES =====
 export interface AuthState {
-  user: User | null;           // Thông tin user hiện tại
-  isAuthenticated: boolean;    // Trạng thái đăng nhập
-  isLoading: boolean;          // Trạng thái loading
-  error: string | null;        // Lỗi nếu có
+  user: User | null; // Thông tin user hiện tại
+  isAuthenticated: boolean; // Trạng thái đăng nhập
+  isLoading: boolean; // Trạng thái loading
+  error: string | null; // Lỗi nếu có
 }
 
 // Types cho async thunks
@@ -26,17 +26,17 @@ const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 // ===== 3. ASYNC THUNKS (Xử lý API calls) =====
 // Login user
 export const loginUser = createAsyncThunk(
-  'auth/loginUser',  // Action type prefix
+  'auth/loginUser', // Action type prefix
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
       // Mock API call - thay thế bằng API thật
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock validation
       if (credentials.email === 'test@example.com' && credentials.password === 'password') {
@@ -44,10 +44,9 @@ export const loginUser = createAsyncThunk(
           id: '1',
           email: credentials.email,
           name: credentials.email.split('@')[0],
-          avatar: null,
+          avatar: null
         };
         return mockUser;
-        
       } else {
         throw new Error('Email hoặc mật khẩu không đúng');
       }
@@ -72,13 +71,13 @@ export const registerUser = createAsyncThunk(
       }
 
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const mockUser: User = {
         id: Date.now().toString(),
         email: credentials.email,
         name: credentials.email.split('@')[0],
-        avatar: null,
+        avatar: null
       };
 
       return mockUser;
@@ -90,7 +89,7 @@ export const registerUser = createAsyncThunk(
 
 // ===== 4. SLICE CREATION =====
 export const authSlice = createSlice({
-  name: 'auth',  // Tên slice
+  name: 'auth', // Tên slice
   initialState,
   reducers: {
     // ===== SYNCHRONOUS ACTIONS =====
@@ -106,7 +105,7 @@ export const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-    },
+    }
   },
   extraReducers: (builder) => {
     // ===== ASYNC ACTIONS HANDLERS =====
@@ -145,7 +144,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = action.payload as string;
       });
-  },
+  }
 });
 
 // ===== 5. EXPORT ACTIONS =====

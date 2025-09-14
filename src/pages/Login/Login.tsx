@@ -1,27 +1,16 @@
-import { useState } from 'react';
-import { 
-  Form, 
-  Button, 
-  Card, 
-  Typography, 
-  Divider, 
-  Space, 
-  message,
-  Checkbox,
-  Row,
-  Col,
-} from 'antd';
-import { 
-  UserOutlined, 
-  LockOutlined, 
-  EyeInvisibleOutlined, 
+import {
+  EyeInvisibleOutlined,
   EyeTwoTone,
-  GoogleOutlined,
   FacebookOutlined,
+  GoogleOutlined,
+  LockOutlined,
+  UserOutlined
 } from '@ant-design/icons';
+import { Button, Card, Checkbox, Col, Divider, Form, Row, Space, Typography, message } from 'antd';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AppInput from '../../components/Input/AppInput';
 import AppButton from '../../components/Button/AppButton';
+import AppInput from '../../components/Input/AppInput';
 import { useAuth } from '../../hooks';
 
 const { Title, Text } = Typography;
@@ -32,14 +21,21 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login, state: authState } = useAuth();
 
+  // Redirect khi đăng nhập thành công
+  useEffect(() => {
+    if (authState.isAuthenticated) {
+      navigate('/');
+    }
+  }, [authState.isAuthenticated, navigate]);
+
   const onFinish = async (values: any) => {
     setLoading(true);
-    
+
     try {
-      await login(values.email, values.password);
+      await login(values.email, values.password).unwrap();
       message.success('Đăng nhập thành công!');
-      navigate('/');
     } catch (error) {
+      message.error('Đăng nhập thất bại!');
     } finally {
       setLoading(false);
     }

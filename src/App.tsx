@@ -1,14 +1,15 @@
 import './App.css'
 import AppRouter from './router/Routers'
-import { AuthProvider, ThemeProvider } from './contexts'
+import { ReduxProvider } from './store/ReduxProvider'
+import { ThemeProvider } from './contexts'
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
+    <ReduxProvider>
+      <ThemeProvider>
         <AppRouter />
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ReduxProvider>
   )
 }
 
